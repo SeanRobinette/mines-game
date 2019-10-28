@@ -15,7 +15,8 @@ function shuffle(array) {
   }
 
 class Board {
-    values;
+    displayValues;
+    trueValues;
     width;
     height;
     mineCount;
@@ -26,42 +27,122 @@ class Board {
         this.mineCount = m;
 
         // Initialize with an empty array of size w * h
-        this.values = Array(w*h).fill();
-        // Set the first m values to X, and the rest to an empty string
-        this.values = this.values.map((_, i) => (i < m) ? 'X' : '');
+        this.displayValues = Array(w*h).fill('?');
+        this.trueValues = Array(w*h).fill();
+        
+        // Set the first m values to be mines, and the rest to empty tiles
+        this.trueValues = this.trueValues.map((_, i) => (i < m) ? 'X' : '');
+
         // Shuffle the mines into random locations
-        shuffle(this.values);
-        console.log(this.values);
+        shuffle(this.trueValues);
+
+        // Count adjacent mines and update the board with the counts
+        for(let c = 0; c < this.width; c++) {
+            for(let r = 0; r < this.height; r++) {
+                if(this.get(r, c) !== 'X') {
+                    this.set(r, c, this.countAdjacent(r, c));
+                }
+            }
+        }
+    }
+    countAdjacent(r, c) {
+        let count = 0;
+        for(const off_c of [-1,0,1]) {
+            for(const off_r of [-1,0,1]) {
+                if(this.get(r + off_r, c + off_c) === 'X') {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
     get(r, c) {
-        return this.values[c + r * this.width];
+        if(this.isOutOfBounds(r,c)) {
+            return '';
+        }
+        return this.trueValues[c + r * this.width];
+    }
+    getDisplay(r, c) {
+        return this.displayValues[c + r * this.width];
+    }
+    set(r, c, value) {
+        this.trueValues[c + r * this.width] = value;
+    }
+    isOutOfBounds(r, c) {
+        return r < 0 || c < 0 || r >= this.height || c >= this.width;
+    }
+    isShowing(r, c) {
+        const val = this.getDisplay(r,c);
+        return !(val === '?' || val ==='x')
+    }
+    reveal(r, c) {
+        if(this.isOutOfBounds(r, c)) {
+            return;
+        }
+        if(this.isShowing(r, c)) {
+            return;
+        }
+
+        console.log('reveal: ' + this.displayValues[c + r * this.width] + '->' + this.trueValues[c + r * this.width]);
+        this.displayValues[c + r * this.width] = this.trueValues[c + r * this.width];
+        // If there are no adjacent mines, propagate to reveal adjacent tiles
+        if(this.trueValues[c + r * this.width] === 0) {
+            console.log('propagate!')
+            for(let r_off of [-1,0,1]) 
+                for(let c_off of [-1,0,1]) 
+                    if(!(r_off === 0 && c_off === 0))
+                        this.reveal(r + r_off, c + c_off);
+        }
+    }
+    mark(r, c) {
+        if(this.isOutOfBounds(r, c))
+            return;
+        if(this.getDisplay(r, c) !== '?')
+            return;
+        this.displayValues[c + r * this.width] = 'x';
     }
 }
 
 export class Square extends React.Component {
     render() {
-        return <td className="square">{this.props.value}</td>
+        const value = this.props.value;
+        const showing = this.props.showing;
+        if(showing) {
+            return (<td className={'revealed square square-' + value} 
+                        onClick={this.props.onClick}
+                        onContextMenu={this.props.onContextMenu}>{this.props.value}</td>)
+        } else {
+            return (<td className={'hidden square'} 
+                        onClick={this.props.onClick}
+                        onContextMenu={this.props.onContextMenu}>{this.props.value === '?' ? '' : this.props.value}</td>)
+        }
     }
 }
 
 export class Grid extends React.Component {
     constructor(props) {
         super(props);
-        // Array of, eg, 100 increasing values (0, ..., 99)
+        this.handleLeftClick = this.handleLeftClick.bind(this);
+        this.handleRightClick = this.handleRightClick.bind(this);
         this.state = {
-            board: new Board(10,10,20)
+            board: new Board(props.width, props.height, props.mines)
         };
     }
     render() {
         const rows = this.props.height;
         const cols = this.props.width;
+        const mines = this.props.mines;
         const board = this.state.board;
-        
+
         // Loop over rows, then columns, adding <tr> and <td> tags respectively
         const content = Array(rows).fill().map((_, r) => (
             <tr key={r}>
                 {Array(cols).fill().map((_, c) => (
-                    <Square value={board.get(r,c)} key={c}/>
+                    <Square value={board.getDisplay(r,c)} 
+                            showing={board.isShowing(r,c)} 
+                            key={c} 
+                            onClick={() => this.handleLeftClick(r,c)}
+                            onContextMenu={() => this.handleRightClick(r,c)}/>
                 ))}
             </tr>
         ));
@@ -72,5 +153,15 @@ export class Grid extends React.Component {
                 </tbody>
             </table>
             )
+    }
+    handleLeftClick(r,c) {
+        let board = this.state.board;
+        board.reveal(r, c);
+        this.setState({board: board});
+    }
+    handleRightClick(r,c){
+        let board = this.state.board;
+        board.mark(r, c);
+        this.setState({board: board});
     }
 }

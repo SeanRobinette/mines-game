@@ -9,12 +9,41 @@
     border: 2px solid #888;
     width: 0.75cm;
     height: 0.75cm;
-}
-
-.revealed {
-    background: #FFF;
-}
-
-.hidden {
     background: #BBB;
+}
+.square-0 {
+    color: #0000
+}
+.square-1 {
+    color: blue;
+}
+.square-2 {
+    color: green;
+}
+.square-3 {
+    color: red;
+}
+.square-4 {
+    color: yellow;
+}
+.square-5 {
+    color: magenta;
+}
+.square-6 {
+    color: cyan;
+}
+.square-7 {
+    color: brown;
+}
+.square-6 {
+    color: darkgray;
+}
+.square-6 {
+    color: darkred;
+}
+.revealed {
+    background: #BBB;
+}
+.hidden {
+    background: #666;
 }
