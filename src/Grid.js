@@ -85,7 +85,7 @@ export class Grid extends React.Component {
             this.clickedRecently = {button: 'left',r: r,c: c};
             this.clickTimeout = setTimeout(() => {
                 this.clickedRecently = {button: undefined,r:-1,c:-1};
-            }, 1000);
+            }, 200);
         }
     }
     handleRightClick(r,c){
@@ -102,7 +102,7 @@ export class Grid extends React.Component {
             this.clickedRecently = {button: 'right',r: r,c: c};
             this.clickTimeout = setTimeout(() => {
                 this.clickedRecently = {button: undefined,r:-1,c:-1};
-            }, 1000);
+            }, 200);
         }
     }
     handleDoubleClick(r,c) {
