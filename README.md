@@ -1,6 +1,6 @@
 # Mines Game
 ## Introduction
-This is Minesweeper clone I made with [React](http://www.reactjs.org). I created it mainly as a learning exercise and a demonstration of React's capabilities, but of course you can also play it.
+This is minesweeping game I made with [React](http://www.reactjs.org). I created it mainly as a learning exercise and a demonstration of React's capabilities, but of course you can also play it.
 
 Since this project is just a front-end web application, once built it can be hosted on any server as static HTML/JavaScript/CSS content. A working version can be found on [my web site](http://www.seanrobinette.com/mines/index.html).
 
