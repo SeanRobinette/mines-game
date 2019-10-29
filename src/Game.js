@@ -28,9 +28,6 @@ export class Game extends React.Component {
                 {grid}
                 {statusMessage}
                 <div className="row"><button onClick={() => this.reset()}>New Game</button></div>
-                <div className="row"><label>Width:</label><input type="number"/></div>
-                <div className="row"><label>Height:</label><input type="number"/></div>
-                <div className="row"><label>Mines:</label><input type="number"/></div>
             </div>
         )
     }
