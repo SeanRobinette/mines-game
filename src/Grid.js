@@ -11,7 +11,7 @@ export class Square extends React.Component {
                         onClick={this.props.onClick}
                         onContextMenu={this.props.onContextMenu}>{this.props.value}</td>)
         } else {
-            return (<td className={'hidden square'} 
+            return (<td className={'secret square'} 
                         onClick={this.props.onClick}
                         onContextMenu={this.props.onContextMenu}>{this.props.value === '?' ? '' : this.props.value}</td>)
         }
