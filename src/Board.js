@@ -59,6 +59,9 @@ export class Board {
         if(this.isShowing(r, c)) {
             return;
         }
+        if(this.displayValues[c + r * this.width] === 'x') {
+            return;
+        }
 
         // Grab the value being revealed
         const value = this.trueValues[c + r * this.width];
@@ -88,10 +91,7 @@ export class Board {
             for(let c_off of [-1,0,1]) {
                 if(r_off === 0 && c_off === 0)
                     continue;
-                const r_cur = r + r_off;
-                const c_cur = c + c_off
-                if(this.displayValues[c_cur + r_cur * this.width] !== 'x')
-                    this.reveal(r + r_off, c + c_off);
+                this.reveal(r + r_off, c + c_off);
             }
         }
     }

@@ -36,7 +36,7 @@ export class Square extends React.Component {
 
 export class Grid extends React.Component {
     
-    clickedRecently = undefined;
+    clickedRecently = {button: undefined, r:-1, c:-1};
 
     constructor(props) {
         super(props);
@@ -73,21 +73,37 @@ export class Grid extends React.Component {
     }
     handleLeftClick(r,c) {
         this.props.handleLeftClick(r,c)
-        if(this.clickedRecently && this.clickedRecently.r === r && this.clickedRecently.c === c) {
+        if(this.clickedRecently.button === 'right'
+          && this.clickedRecently.r === r
+          && this.clickedRecently.c === c) {
             clearTimeout(this.clickTimeout);
-            this.clickedRecently = undefined;
+            this.clickedRecently = {button: undefined,r:-1,c:-1};
             this.clickTimeout = undefined;
             this.handleDoubleClick(r,c);
         } else {
             clearTimeout(this.clickTimeout);
-            this.clickedRecently = {r: r, c: c};
+            this.clickedRecently = {button: 'left',r: r,c: c};
             this.clickTimeout = setTimeout(() => {
-                this.clickedRecently = undefined;
-            }, 200);
+                this.clickedRecently = {button: undefined,r:-1,c:-1};
+            }, 1000);
         }
     }
     handleRightClick(r,c){
         this.props.handleRightClick(r,c);
+        if(this.clickedRecently.button === 'left'
+          && this.clickedRecently.r === r
+          && this.clickedRecently.c === c) {
+            clearTimeout(this.clickTimeout);
+            this.clickedRecently = {button: undefined,r:-1,c:-1};
+            this.clickTimeout = undefined;
+            this.handleDoubleClick(r,c);
+        } else {
+            clearTimeout(this.clickTimeout);
+            this.clickedRecently = {button: 'right',r: r,c: c};
+            this.clickTimeout = setTimeout(() => {
+                this.clickedRecently = {button: undefined,r:-1,c:-1};
+            }, 1000);
+        }
     }
     handleDoubleClick(r,c) {
         console.log('double clicked!');
