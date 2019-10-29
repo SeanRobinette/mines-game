@@ -62,9 +62,9 @@ export class Grid extends React.Component {
                             />
                 ))}
             </tr>
-        ));
+        ));            
         return (
-            <table className="grid">
+            <table className={'grid grid-' + board.state}>
                 <tbody>
                 {content}
                 </tbody>
