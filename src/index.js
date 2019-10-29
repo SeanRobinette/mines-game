@@ -5,12 +5,12 @@ import * as serviceWorker from './serviceWorker';
 import { Grid } from './Grid';
 
 let body = (
-    <div class="container">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class="panel-title">Mines Game</h1>
+    <div className="container">
+        <div className="panel panel-primary">
+            <div className="panel-heading">
+                <h1 className="panel-title">Mines Game</h1>
             </div>
-            <div class="panel-body">
+            <div className="panel-body">
                 <Grid width={10} height={10} mines={15}/>
             </div>
         </div>

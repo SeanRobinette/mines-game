@@ -7,13 +7,29 @@ export class Square extends React.Component {
         const value = this.props.value;
         const showing = this.props.showing;
         if(showing) {
+            let content;
+            if(typeof(value) === 'number') {
+                if(value > 0)
+                    content = <img className='tile' src={'assets/' + value + '.png'} />
+                else 
+                    content = ''
+            } else {
+                if(value === 'X')
+                    content = <img className='tile mine' src={'assets/mine.png'} />
+                else
+                    content = ''
+            }
+
             return (<td className={'revealed square square-' + value} 
                         onClick={this.props.onClick}
-                        onContextMenu={this.props.onContextMenu}>{this.props.value}</td>)
+                        onContextMenu={this.props.onContextMenu}>{content}</td>)
         } else {
+            let content = ''
+            if(this.props.value === 'x')
+                content = <img className='tile' src={'assets/flag.png'} />
             return (<td className={'secret square'} 
                         onClick={this.props.onClick}
-                        onContextMenu={this.props.onContextMenu}>{this.props.value === '?' ? '' : this.props.value}</td>)
+                        onContextMenu={this.props.onContextMenu}>{content}</td>)
         }
     }
 }

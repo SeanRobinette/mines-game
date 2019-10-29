@@ -11,6 +11,13 @@
     height: 0.75cm;
     background: #BBB;
 }
+.tile {
+    width: 90%;
+    height: 90%;
+}
+.mine {
+    background: red;
+}
 .square-0 {
     color: #0000
 }
