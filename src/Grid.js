@@ -35,10 +35,14 @@ export class Square extends React.Component {
 }
 
 export class Grid extends React.Component {
+    
+    clickedRecently = undefined;
+
     constructor(props) {
         super(props);
         this.handleLeftClick = this.handleLeftClick.bind(this);
         this.handleRightClick = this.handleRightClick.bind(this);
+        this.handleDoubleClick = this.handleDoubleClick.bind(this);
     }
     render() {
         const rows = this.props.board.height;
@@ -54,7 +58,8 @@ export class Grid extends React.Component {
                             showing={board.isShowing(r,c)} 
                             key={c} 
                             onClick={() => this.handleLeftClick(r,c)}
-                            onContextMenu={() => this.handleRightClick(r,c)}/>
+                            onContextMenu={() => this.handleRightClick(r,c)}
+                            />
                 ))}
             </tr>
         ));
@@ -67,9 +72,25 @@ export class Grid extends React.Component {
             )
     }
     handleLeftClick(r,c) {
-        this.props.handleLeftClick(r,c);
+        this.props.handleLeftClick(r,c)
+        if(this.clickedRecently && this.clickedRecently.r === r && this.clickedRecently.c === c) {
+            clearTimeout(this.clickTimeout);
+            this.clickedRecently = undefined;
+            this.clickTimeout = undefined;
+            this.handleDoubleClick(r,c);
+        } else {
+            clearTimeout(this.clickTimeout);
+            this.clickedRecently = {r: r, c: c};
+            this.clickTimeout = setTimeout(() => {
+                this.clickedRecently = undefined;
+            }, 200);
+        }
     }
     handleRightClick(r,c){
         this.props.handleRightClick(r,c);
+    }
+    handleDoubleClick(r,c) {
+        console.log('double clicked!');
+        this.props.handleDoubleClick(r,c);
     }
 }

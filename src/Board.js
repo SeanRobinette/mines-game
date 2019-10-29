@@ -83,6 +83,18 @@ export class Board {
             this.state = 'won';
         }
     }
+    revealAdjacent(r, c) {
+        for(let r_off of [-1,0,1]) {
+            for(let c_off of [-1,0,1]) {
+                if(r_off === 0 && c_off === 0)
+                    continue;
+                const r_cur = r + r_off;
+                const c_cur = c + c_off
+                if(this.displayValues[c_cur + r_cur * this.width] !== 'x')
+                    this.reveal(r + r_off, c + c_off);
+            }
+        }
+    }
     checkForWin() {
         console.log('Checking for win...');
         for(let i=0;i<this.trueValues.length;i++) {

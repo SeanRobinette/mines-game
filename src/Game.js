@@ -13,7 +13,8 @@ export class Game extends React.Component {
         const board = this.state.board;
         const grid =  <Grid board={board}
                         handleLeftClick={(r,c) => this.handleLeftClick(r,c)}
-                        handleRightClick={(r,c) => this.handleRightClick(r,c)}/>
+                        handleRightClick={(r,c) => this.handleRightClick(r,c)}
+                        handleDoubleClick={(r,c) => this.handleDoubleClick(r,c)}/>
         let statusMessage;
         if(board.state === 'lost') {
             statusMessage = <div>You lost.</div>
@@ -36,7 +37,15 @@ export class Game extends React.Component {
     reset() {
         this.setState({board: new Board(this.props.width, this.props.height, this.props.mines)})
     }
-    handleLeftClick(r,c) {
+    handleDoubleClick(r, c) {
+        let board = this.state.board;
+        if(!(board.state === 'active')) {
+            return;
+        }
+        board.revealAdjacent(r, c);
+        this.setState(board);
+    }
+    handleLeftClick(r, c) {
         let board = this.state.board;
         if(!(board.state === 'active')) {
             return;
@@ -44,7 +53,7 @@ export class Game extends React.Component {
         board.reveal(r, c);
         this.setState({board: board});
     }
-    handleRightClick(r,c){
+    handleRightClick(r, c){
         let board = this.state.board;
         board.mark(r, c);
         this.setState({board: board});
