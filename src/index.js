@@ -11,7 +11,7 @@ let body = (
                 <h1 className="panel-title">Mines Game</h1>
             </div>
             <div className="panel-body">
-                <Game width={10} height={10} mines={15}/>
+                <Game width={10} height={10} mines={5}/>
             </div>
         </div>
     </div>

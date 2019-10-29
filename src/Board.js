@@ -4,12 +4,13 @@ export class Board {
     width;
     height;
     mineCount;
+    state;
 
     constructor(w,h,m) {
         this.width = w;
         this.height = h;
         this.mineCount = m;
-        
+
         this.reset(w,h,m);
     }
     // Fisher-Yates implementation from https://javascript.info/task/shuffle
@@ -18,10 +19,6 @@ export class Board {
             let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
     
             // swap elements array[i] and array[j]
-            // we use "destructuring assignment" syntax to achieve that
-            // you'll find more details about that syntax in later chapters
-            // same can be written as:
-            // let t = array[i]; array[i] = array[j]; array[j] = t
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
@@ -63,16 +60,43 @@ export class Board {
             return;
         }
 
-        console.log('reveal: ' + this.displayValues[c + r * this.width] + '->' + this.trueValues[c + r * this.width]);
-        this.displayValues[c + r * this.width] = this.trueValues[c + r * this.width];
+        // Grab the value being revealed
+        const value = this.trueValues[c + r * this.width];
+
+        // Set the display value to the revealed value
+        console.log('reveal: ' + this.displayValues[c + r * this.width] + '->' + value);
+        this.displayValues[c + r * this.width] = value;
+
         // If there are no adjacent mines, propagate to reveal adjacent tiles
-        if(this.trueValues[c + r * this.width] === 0) {
+        if(value === 0) {
             console.log('propagate!')
             for(let r_off of [-1,0,1]) 
                 for(let c_off of [-1,0,1]) 
                     if(!(r_off === 0 && c_off === 0))
                         this.reveal(r + r_off, c + c_off);
+        } else if(value === 'X') {
+            console.log('You lost!');
+            this.state = 'lost';
         }
+        if(!(this.state === 'lost') && this.checkForWin()) {
+            console.log('You won!');
+            this.state = 'won';
+        }
+    }
+    checkForWin() {
+        console.log('Checking for win...');
+        for(let i=0;i<this.trueValues.length;i++) {
+            // If the tile is empty
+            if(this.trueValues[i] !== 'X') {
+                // If the tile hasn't been revealed
+                if(this.displayValues[i] !== this.trueValues[i]) {
+                    // Then there is an empty tile left, so no win yet
+                    console.log('Nope!');
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     mark(r, c) {
         if(this.isOutOfBounds(r, c))
@@ -82,6 +106,8 @@ export class Board {
         this.displayValues[c + r * this.width] = 'x';
     }
     reset(w,h,m) {
+        this.state = 'active';
+
         // Initialize with an empty array of size w * h
         this.displayValues = Array(w*h).fill('?');
         this.trueValues = Array(w*h).fill();
@@ -100,6 +126,5 @@ export class Board {
                 }
             }
         }
-
     }
 }

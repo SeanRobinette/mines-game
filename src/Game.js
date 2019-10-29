@@ -14,13 +14,22 @@ export class Game extends React.Component {
         const grid =  <Grid board={board}
                         handleLeftClick={(r,c) => this.handleLeftClick(r,c)}
                         handleRightClick={(r,c) => this.handleRightClick(r,c)}/>
+        let statusMessage;
+        if(board.state === 'lost') {
+            statusMessage = <div>You lost.</div>
+        } else if(board.state === 'won') {
+            statusMessage = <div>You won!</div>
+        } else {
+            statusMessage = <div>Click on tiles to reveal them.</div>
+        }
         return (
             <div>
                 {grid}
-                <div class="row"><button onClick={() => this.reset()}>New Game</button></div>
-                <div class="row"><label>Width:</label><input type="number"/></div>
-                <div class="row"><label>Height:</label><input type="number"/></div>
-                <div class="row"><label>Mines:</label><input type="number"/></div>
+                {statusMessage}
+                <div className="row"><button onClick={() => this.reset()}>New Game</button></div>
+                <div className="row"><label>Width:</label><input type="number"/></div>
+                <div className="row"><label>Height:</label><input type="number"/></div>
+                <div className="row"><label>Mines:</label><input type="number"/></div>
             </div>
         )
     }
@@ -29,6 +38,9 @@ export class Game extends React.Component {
     }
     handleLeftClick(r,c) {
         let board = this.state.board;
+        if(!(board.state === 'active')) {
+            return;
+        }
         board.reveal(r, c);
         this.setState({board: board});
     }
