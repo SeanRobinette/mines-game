@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Grid } from './Grid';
+import { Game } from './Game';
 
 let body = (
     <div className="container">
@@ -11,7 +11,7 @@ let body = (
                 <h1 className="panel-title">Mines Game</h1>
             </div>
             <div className="panel-body">
-                <Grid width={10} height={10} mines={15}/>
+                <Game width={10} height={10} mines={15}/>
             </div>
         </div>
     </div>
