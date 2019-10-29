@@ -11,6 +11,7 @@
     width: 0.75cm;
     height: 0.75cm;
     background: #BBB;
+    transition: 0.1s;
 }
 .tile {
     width: 90%;
