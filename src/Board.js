@@ -9,25 +9,8 @@ export class Board {
         this.width = w;
         this.height = h;
         this.mineCount = m;
-
-        // Initialize with an empty array of size w * h
-        this.displayValues = Array(w*h).fill('?');
-        this.trueValues = Array(w*h).fill();
         
-        // Set the first m values to be mines, and the rest to empty tiles
-        this.trueValues = this.trueValues.map((_, i) => (i < m) ? 'X' : '');
-
-        // Shuffle the mines into random locations
-        this.shuffle(this.trueValues);
-
-        // Count adjacent mines and update the board with the counts
-        for(let c = 0; c < this.width; c++) {
-            for(let r = 0; r < this.height; r++) {
-                if(this.get(r, c) !== 'X') {
-                    this.set(r, c, this.countAdjacent(r, c));
-                }
-            }
-        }
+        this.reset(w,h,m);
     }
     // Fisher-Yates implementation from https://javascript.info/task/shuffle
     shuffle(array) {
@@ -97,5 +80,26 @@ export class Board {
         if(this.getDisplay(r, c) !== '?')
             return;
         this.displayValues[c + r * this.width] = 'x';
+    }
+    reset(w,h,m) {
+        // Initialize with an empty array of size w * h
+        this.displayValues = Array(w*h).fill('?');
+        this.trueValues = Array(w*h).fill();
+        
+        // Set the first m values to be mines, and the rest to empty tiles
+        this.trueValues = this.trueValues.map((_, i) => (i < m) ? 'X' : '');
+
+        // Shuffle the mines into random locations
+        this.shuffle(this.trueValues);
+
+        // Count adjacent mines and update the board with the counts
+        for(let c = 0; c < this.width; c++) {
+            for(let r = 0; r < this.height; r++) {
+                if(this.get(r, c) !== 'X') {
+                    this.set(r, c, this.countAdjacent(r, c));
+                }
+            }
+        }
+
     }
 }

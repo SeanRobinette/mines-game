@@ -11,18 +11,21 @@ export class Game extends React.Component {
     }
     render() {
         const board = this.state.board;
-        const grid =  <Grid board={this.state.board}
+        const grid =  <Grid board={board}
                         handleLeftClick={(r,c) => this.handleLeftClick(r,c)}
                         handleRightClick={(r,c) => this.handleRightClick(r,c)}/>
         return (
             <div>
                 {grid}
-                <div class="row"><button>New Game</button></div>
+                <div class="row"><button onClick={() => this.reset()}>New Game</button></div>
                 <div class="row"><label>Width:</label><input type="number"/></div>
                 <div class="row"><label>Height:</label><input type="number"/></div>
                 <div class="row"><label>Mines:</label><input type="number"/></div>
             </div>
         )
+    }
+    reset() {
+        this.setState({board: new Board(this.props.width, this.props.height, this.props.mines)})
     }
     handleLeftClick(r,c) {
         let board = this.state.board;
