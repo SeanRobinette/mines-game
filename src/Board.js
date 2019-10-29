@@ -78,12 +78,11 @@ export class Board {
                     if(!(r_off === 0 && c_off === 0))
                         this.reveal(r + r_off, c + c_off);
         } else if(value === 'X') {
-            console.log('You lost!');
             this.state = 'lost';
         }
         if(!(this.state === 'lost') && this.checkForWin()) {
-            console.log('You won!');
             this.state = 'won';
+            this.doVictory();
         }
     }
     revealAdjacent(r, c) {
@@ -110,12 +109,27 @@ export class Board {
         }
         return true;
     }
+    doVictory() {
+        for(let i=0;i<this.trueValues.length;i++) {
+            if(this.trueValues[i] === 'X')
+                this.displayValues[i] = 'x';
+            else
+                this.displayValues[i] = this.trueValues[i];
+        }
+    }
     mark(r, c) {
         if(this.isOutOfBounds(r, c))
             return;
-        if(this.getDisplay(r, c) !== '?')
-            return;
-        this.displayValues[c + r * this.width] = 'x';
+        switch(this.getDisplay(r, c)) {
+            case '?':
+                this.displayValues[c + r * this.width] = 'x';
+                break;
+            case 'x':
+                this.displayValues[c + r * this.width] = '?';
+                break;
+            default:
+                break;
+        }
     }
     reset(w,h,m) {
         this.state = 'active';

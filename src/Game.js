@@ -55,6 +55,9 @@ export class Game extends React.Component {
     }
     handleRightClick(r, c){
         let board = this.state.board;
+        if(!(board.state === 'active')) {
+            return;
+        }
         board.mark(r, c);
         this.setState({board: board});
     }
